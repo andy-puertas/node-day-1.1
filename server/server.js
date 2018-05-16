@@ -1,6 +1,24 @@
 const express = require('express');
 const app = express();
 const port = 3030;
+const bodyParser = require('body-parser');
+const messagesCtrl = require('./controllers/messages')
+
+
+let messages = [];
+
+
+app.use(bodyParser.json());
+
+
+
+app.get('/api/msg', messagesCtrl.list);
+app.get('/api/msg/:id', messagesCtrl.read)
+app.post('/api/msg', messagesCtrl.create);
+app.put('/api/msg/:id', messagesCtrl.update)
+app.delete('/api/msg/:id', messagesCtrl.delete)
+
+
                     // Request / Response
 app.get('/api/msg', (req, res) => {
     console.log('I\'ve been hit');
@@ -17,6 +35,7 @@ app.get('/api/msg/:name/:message', (req, res) => {
     res.send('Thanks for participating');
 })
 
+
 app.get('/api/msg/:name', (req, res) => {
     console.log(req.query);
     if(typeof req.query.exclamation === "string"){
@@ -26,6 +45,10 @@ app.get('/api/msg/:name', (req, res) => {
         res.status(400).send('Hey there was an error, please fix')
     }
 })
+
+
+
+//axios.post('/api/msg')
 
 app.listen(port, () => {
     console.log("listening to port: " + port);
